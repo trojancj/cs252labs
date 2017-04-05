@@ -3,14 +3,14 @@ public class primeObject implements Runnable{
     private int endVal;
     int threadNumber;
     int numThreads;
-    int total;
+    int[] theArray;
     
-    public primeObject(int startVal, int endVal, int threadNumber, int numThreads){
+    public primeObject(int startVal, int endVal, int threadNumber, int numThreads, int[] theArray){
         this.startVal = startVal;
         this.endVal = endVal;
         this.threadNumber = threadNumber;
         this.numThreads = numThreads;
-        total = 0;
+        this.theArray = theArray;
     }
     public boolean isPrime(int inQuestion){
         int i = 2;
@@ -31,13 +31,10 @@ public class primeObject implements Runnable{
         }
         return counter;
     }
-    public int getTotal(){
-        return total;
-    }
     @Override
     public void run(){
-        int start = (endVal /numThreads) * threadNumber;
-        int end = (endVal / numThreads) * (threadNumber + 1);
-        total = numPrimes(start, end);
+        int start = (((endVal-startVal) / numThreads) * threadNumber) + startVal;
+        int end = (((endVal-startVal) / numThreads) * (threadNumber + 1)) + startVal;
+        theArray[threadNumber] = numPrimes(start, end);
     }
 }
