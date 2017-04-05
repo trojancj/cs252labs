@@ -7,16 +7,19 @@
 #define false 1;
 
 int isPrime(int i);
-int numPrimes(int low, int high);
+int numPrimes(int* low, int* high, int* counter);
 
 int main(){
-    printf("%d\n", numPrimes(10, 100));    
+    int min = 1000;
+    int max = 1000000;
+    int counter = 0;
+    printf("%d\n", numPrimes(&min, &max, &counter));    
     
 }
 //true is 0 and false is 1
 int isPrime(int i){
     int j = 2;
-    for(j; j<i; j++){
+    while(j<i){
         if(i%j == 0){
             return true;
         }
@@ -25,12 +28,13 @@ int isPrime(int i){
     return false;
 }
 
-int numPrimes(int low, int high){
-    int counter = 0;
-    for(low; low<high; low++){
-        if(isPrime(low)){
-            counter = counter+1;
+int numPrimes(int* low, int* high, int* counter){
+    int tracker = *low;
+    int peak = *high;
+    for(tracker; tracker<peak; tracker++){
+        if(isPrime(tracker)){
+            *counter = *counter+1;
         }
     }
-    return counter;
+    return *counter;
 }
