@@ -2,10 +2,10 @@ public class PrimeNumberFinder{
     public static void main(String[] args){
         final long startTime = System.currentTimeMillis();
         
-        int startVal = 1000;
-        int endVal = 1000000;
+        int startVal = 10;
+        int endVal = 100;
         
-        int nThreads = 4;
+        int nThreads = 2;
         int[] totalArray = new int[nThreads];
         
         Thread[] theThreads = new Thread[nThreads];
