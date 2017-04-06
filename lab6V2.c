@@ -10,16 +10,13 @@ int isPrime(int i);
 int numPrimes(int* low, int* high, int* counter);
 
 void* run(void* parm){
-    //Find start
     int* p = (int*)parm;
-    //printf("%d\n", p[2]);
     int start = (((p[1] - p[0]) / p[3]) * p[2]) + p[0];
-    //Find end
     int end = (((p[1] - p[0]) / p[3]) * (p[2] + 1)) + p[0];
-    //Call numPrimes
     int counter = 0;
     p[4+p[2]] = numPrimes(&start, &end, &counter);
-    //Set the total number of primes to array slot
+    //At this point, all the counters add up correctly :)
+    printf("%d\n", p[4+p[2]]);
 }
 
 int main(){
@@ -29,6 +26,7 @@ int main(){
     int numThreads = 4;
     pthread_t ids[numThreads];
     int threadNum = 0;
+    //int* p = (int*)malloc((4+numThreads) * sizeof(int));
     for(threadNum; threadNum < numThreads; threadNum++){
         int* p = (int*)malloc((4+numThreads) * sizeof(int));
         p[0] = min;
@@ -43,13 +41,7 @@ int main(){
         pthread_join(ids[joinBack], NULL);
     }
     //Add stuff back together :)
-    //Problem is the scope of p
-    int j = 4;
-    int total = 0;
-    for(j; j<8; j++){
-        total = total + p[j];
-    }
-    printf("Total is %d\n", total);
+
     printf("Done\n");
     
 }
