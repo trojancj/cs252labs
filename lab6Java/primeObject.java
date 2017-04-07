@@ -33,8 +33,8 @@ public class primeObject implements Runnable{
     }
     @Override
     public void run(){
-        int start = (((endVal-startVal) / numThreads) * threadNumber) + startVal;
-        int end = (((endVal-startVal) / numThreads) * (threadNumber + 1)) + startVal;
+        int start = (int)((((double)(endVal-startVal) / (double)numThreads) * (double)threadNumber) + (double)startVal);
+        int end = (int)(((double)(endVal-startVal) / (double)numThreads) * (double)(threadNumber + 1) + (double)startVal);
         theArray[threadNumber] = numPrimes(start, end);
     }
 }

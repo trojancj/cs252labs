@@ -26,6 +26,7 @@ int main(){
     int numThreads = 4;
     pthread_t ids[numThreads];
     int threadNum = 0;
+    int total = 0;
     //int* p = (int*)malloc((4+numThreads) * sizeof(int));
     for(threadNum; threadNum < numThreads; threadNum++){
         int* p = (int*)malloc((4+numThreads) * sizeof(int));
