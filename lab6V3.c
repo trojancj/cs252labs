@@ -6,6 +6,9 @@
 #define true 0;
 #define false 1;
 
+int total;
+pthread_mutex_t lock;
+
 int isPrime(int i);
 int numPrimes(int* low, int* high, int* counter);
 
@@ -14,20 +17,22 @@ void* run(void* parm){
     int start = (((p[1] - p[0]) / p[3]) * p[2]) + p[0];
     int end = (((p[1] - p[0]) / p[3]) * (p[2] + 1)) + p[0];
     int counter = 0;
-    p[4+p[2]] = numPrimes(&start, &end, &counter);
-    //At this point, all the counters add up correctly :)
-    printf("%d\n", p[4+p[2]]);
+    pthread_mutex_lock(&lock);
+    total = total + numPrimes(&start, &end, &counter);
+    pthread_mutex_unlock(&lock);
 }
 
 int main(){
-    int min = 1000;
-    int max = 1000000;
+    pthread_mutex_init(&lock, NULL);
+    int min = 10;
+    int max = 100;
     int counter = 0;
     int numThreads = 4;
     pthread_t ids[numThreads];
     int threadNum = 0;
+    total = 0;
     for(threadNum; threadNum < numThreads; threadNum++){
-        int* p = (int*)malloc((4+numThreads) * sizeof(int));
+        int* p = (int*)malloc (4 * sizeof(int));
         p[0] = min;
         p[1] = max;
         p[2] = threadNum;
@@ -39,9 +44,7 @@ int main(){
     for(joinBack; joinBack < numThreads; joinBack++){
         pthread_join(ids[joinBack], NULL);
     }
-    //Add stuff back together :)
-
-    printf("Done\n");
+    printf("Total is %d\n", total);
     
 }
 
