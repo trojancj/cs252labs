@@ -29,7 +29,28 @@ int main(){
         }
         int* nargs = (int*)malloc(sizeof(int));
         parseArgs(str, args, 10, nargs);
-        printf("%d\n", *nargs);
+        if(strcmp("exit", args[0]) == 0){
+            return 0;
+        }
+        if(strcmp("cd", args[0]) == 0){
+            int ret;
+            ret = chdir(args[1]);
+            if(ret != 0){
+                printf("Directory was not valid\n");
+            }
+        }
+        //else if(strcmp("ls", args[0]) == 0 || strcmp("pwd", args[0]) == 0){
+        else{
+            int pid = fork();
+            if(pid == 0){
+                int rc = execvp(args[0], args);
+                printf("Thing executed.\n");
+            }
+            else{
+                int status;
+                int result = waitpid(pid, &status, 0);
+            }
+        }
     }
     return EXIT_SUCCESS;
 }
@@ -44,7 +65,7 @@ void parseArgs(char *buffer, char** args, int argsSize, int *nargs){
     bufArgs[0]=buffer;
     args[0]=buffer;
 
-    for(cp=bufArgs; (*cp=strsep(&wbuf, "\n\t")) != NULL;){
+    for(cp=bufArgs; (*cp=strsep(&wbuf, " \n\t")) != NULL;){
         if((*cp != '\0') && (++cp >= &bufArgs[argsSize]))
             break;
     }
