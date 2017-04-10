@@ -4,22 +4,32 @@
 #include <string.h>
 #include <limits.h>
 
+int moreCommands = 1;
+
 void parseArgs(char *buffer, char** args, int argsSize, int *nargs);
 
 int main(){
-    //pwd stuff
-    char* cwd;
-    char buff[PATH_MAX + 1];
-    cwd = getcwd(buff, PATH_MAX+1);
+    while(moreCommands){
+        //pwd stuff
+        char* cwd;
+        char buff[PATH_MAX + 1];
+        cwd = getcwd(buff, PATH_MAX+1);
 
-    //fgets stuff
-    char str[60];
-
-    if(cwd != NULL){
+        //fgets stuff
+        char* str = (char*)malloc(60*sizeof(char));
         printf("%s>", cwd);
         printf("%s\n", fgets(str, 60, stdin));
-        char** args[10];
-        parseArgs(fgets, args, 10); 
+
+        //parsing stuff
+        char** args = (char**)malloc(10*sizeof(char*));
+        //populate the array with stuff
+        int i;
+        for(i=0; i<10; i++){
+            args[i] = (char*)malloc(25 * sizeof(char));
+        }
+        int* nargs = (int*)malloc(sizeof(int));
+        parseArgs(str, args, 10, nargs);
+        printf("%d\n", *nargs);
     }
     return EXIT_SUCCESS;
 }
