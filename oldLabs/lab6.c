@@ -23,8 +23,8 @@ void* run(void* parm){
 
 int main(){
     pthread_mutex_init(&lock, NULL);
-    int min = 10;
-    int max = 100;
+    int min = 1000;
+    int max = 1000000;
     int counter = 0;
     int numThreads = 4;
     pthread_t ids[numThreads];

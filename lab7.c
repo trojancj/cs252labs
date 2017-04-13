@@ -5,9 +5,11 @@
 #define true 0;
 #define false 1;
 
+//Prototypes
 int isPrime(int i);
 int numPrimes(int* low, int* high, int* counter);
 
+//Main
 int main(){
     int min = 10;
     int max = 100;
@@ -15,6 +17,7 @@ int main(){
     printf("%d\n", numPrimes(&min, &max, &counter));
 }
 
+//Returns true if i is prime
 int isPrime(int i){
     int j = 2;
     while(j<i){
@@ -25,6 +28,8 @@ int isPrime(int i){
     }
     return false;
 }
+
+//Returns the number of primes within the given range
 int numPrimes(int* low, int* high, int* counter){
     int tracker = *low;
     int peak = *high;
