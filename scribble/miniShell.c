@@ -33,6 +33,7 @@ int main(){
         }
         int* nargs = (int*)malloc(sizeof(int));
         parseArgs(str, args, 10, nargs);
+
         if(strcmp("exit", args[0]) == 0){
             return 0;
         }
@@ -49,30 +50,24 @@ int main(){
             int leftArrow = -1;
             leftArrow = redirectLeft(args, nargs);
             if(rightArrow != -1){
-                printf("Right arrow detected.\n");
-                FILE *fp;
-                fp = freopen((args[rightArrow+1]), "w+", stdout);
-                /*
-                remove_element(args, rightArrow, nargs);
-                remove_element(args, rightArrow, nargs);
-                
                 int pid = fork();
                 if(pid==0){
+                    FILE *fp;
+                    fp = freopen((args[rightArrow+1]), "w+", stdout);
                     int rc = execvp(args[0], args);
+                    fclose(fp);
                 }
                 else{
                     int status;
                     int result = waitpid(pid, &status, 0);
                 }
-                */
-                printf("Hello.\n");
-                fclose(fp);
             }
+            /*
             else if(leftArrow != -1){
-                printf("Left arrow detected.\n");
-                remove_element(args, leftArrow, nargs);
                 int pid = fork();
                 if(pid == 0){
+                    FILE *fp;
+                    fp = fopen(args[rightArrow+1], "r");
                     int rc = execvp(args[0], args);
                 }
                 else{
@@ -80,6 +75,7 @@ int main(){
                     int result = waitpid(pid, &status, 0);
                 }
             }
+            */
             else{
                 int pid = fork();
                 if(pid == 0){

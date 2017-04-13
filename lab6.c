@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <pthread.h>
 
 #define true 0;
 #define false 1;
@@ -22,8 +23,8 @@ void* run(void* parm){
 
 int main(){
     pthread_mutex_init(&lock, NULL);
-    int min = 1000;
-    int max = 1000000;
+    int min = 10;
+    int max = 100;
     int counter = 0;
     int numThreads = 4;
     pthread_t ids[numThreads];
@@ -48,7 +49,6 @@ int main(){
 
 int isPrime(int i){
     int j = 2;
-    }
     while(j<i){
         if(i%j == 0){
             return true;
