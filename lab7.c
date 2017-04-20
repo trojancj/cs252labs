@@ -7,6 +7,8 @@
 
 int stripeTotal;
 int blockTotal;
+double currTimeStripe;
+double currTimeBlock;
 
 //Prototypes
 int isPrime(int i);
@@ -21,33 +23,33 @@ int main(int argc, char *argv[]){
     omp_set_num_threads(5);
 
     getStripeTotal(min, max);
-    //printf("Stripe total is: %d\n", stripeTotal);
+    printf("Overall time: %lf with %d found.\n", omp_get_wtime()-currTimeStripe, stripeTotal);
+    printf("\n");
     getBlockTotal(min, max);
-    //printf("%d\n", blockTotal);
+    printf("Overall time: %lf with %d found.\n", omp_get_wtime()-currTimeBlock, blockTotal);
 }
 
 void getBlockTotal(int min, int max){
     printf("Block:\n");
     blockTotal = 0;
     int i;
-    double currTime = omp_get_wtime();
+    currTimeBlock = omp_get_wtime();
     #pragma omp parallel reduction(+: blockTotal)
     {
-        #pragma omp for schedule(static, ((max-min)/4))
+        #pragma omp for schedule(static, ((max-min)/5))
         for(i=min; i<max; i++){
             if(isPrime(i)){
                 blockTotal = blockTotal + 1;
             }
         }
-        printf("Time for %d: %lf with %d found.\n", omp_get_thread_num(), omp_get_wtime()-currTime, blockTotal);
+        printf("Time for %d: %lf with %d found.\n", omp_get_thread_num(), omp_get_wtime()-currTimeBlock, blockTotal);
     }
-    printf("Overall time: %lf with %d found.\n", omp_get_wtime()-currTime, blockTotal);
 }
 void getStripeTotal(int min, int max){
     printf("Stripe:\n");
     stripeTotal = 0;
     int i;
-    double currTime = omp_get_wtime();
+    currTimeStripe = omp_get_wtime();
     #pragma omp parallel reduction(+: stripeTotal)
     {
         #pragma omp for schedule(static, 1) 
@@ -57,9 +59,8 @@ void getStripeTotal(int min, int max){
             }
             //printf("%d, %d\n", omp_get_thread_num(), i);
         }
-        printf("Time for %d: %lf with %d found.\n", omp_get_thread_num(), omp_get_wtime()-currTime, stripeTotal);
+        printf("Time for %d: %lf with %d found.\n", omp_get_thread_num(), omp_get_wtime()-currTimeStripe, stripeTotal);
     }
-    printf("Overall time: %lf with %d found.\n", omp_get_wtime()-currTime, stripeTotal);
 }
 
 //Returns true if i is prime
