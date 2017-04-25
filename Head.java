@@ -1,4 +1,4 @@
-package trojanLab08;
+package main;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,42 +11,49 @@ import java.net.Socket;
 public class Head {
 
 	public static void main(String[] args) {
-		
-		int totalNodes = 5;
-		
+
+		int numNodes = 1; // the number of connections we want to connect to our
+							// head node
 		try {
-			ServerSocket ss = new ServerSocket(7000);
-			
-			for(int i = 0; i < totalNodes; i++) {
-							
-				Socket s = ss.accept();  // blocking
-			
+			ServerSocket ss = new ServerSocket(7000); // blocking
+
+			for (int i = 0; i < numNodes; i++) {
+				System.out.println("Head node starting");
+				Socket s = ss.accept();
+
+				OutputStream os = s.getOutputStream();
+				ObjectOutputStream oos = new ObjectOutputStream(os);
+
 				InputStream is = s.getInputStream();
 				ObjectInputStream ois = new ObjectInputStream(is);
-				
-				OutputStream os = s.getOutputStream();	
-				ObjectOutputStream oos = new ObjectOutputStream(os);
-				
-				
 				try {
-					Integer x = (Integer)(ois.readObject());
-					
-					String str = (String)(ois.readObject());
-					
-					System.out.println(x);
-					System.out.println(str);
-					
-					
-					oos.writeObject("thanks");
-					
+					System.out.println(i + " node connected");
+
+					Integer start = 10; // beginning of the ranges
+					Integer end = 100; // end of the ranges
+
+					oos.writeObject(start);
+					oos.writeObject(end); // writes to the node console
+											// that it has been accepted
+					Integer num = (Integer) (ois.readObject()); // creates a
+																// variable to
+																// be read from
+																// the nodes
+
+					System.out.println(num);
+
 				} catch (ClassNotFoundException e) {
 					e.printStackTrace();
 				}
 			}
-		ss.close();
-		} 
-		catch (IOException e) {
+
+			System.out.println("head closing");
+			ss.close(); // closes the socket to basically stop the program
+
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 	}
+
 }
