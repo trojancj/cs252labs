@@ -14,12 +14,12 @@ public class Head {
 
 		int numNodes = 5; // the number of connections we want to connect to our
 							// head node
-        int numThreads = 4;
-        int[] totalArray = new int[numThreads];
+        //int numThreads = 4;
+        //int[] totalArray = new int[numThreads];
         int[] total = new int[numNodes];
         
-        Integer start = 100;
-        Integer end = 100000;
+        Integer start = 1000;
+        Integer end = 1000000;
         
         Socket[] sockets = new Socket[numNodes];
         
