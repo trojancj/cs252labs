@@ -1,4 +1,4 @@
-package main;
+//package main;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,26 +11,47 @@ import java.net.UnknownHostException;
 public class Node {
 
 	public static void main(String[] args) {
-
+		
+		int nThreads = 4;
+		int[] totalArray = new int[nThreads];
+		Thread[] theThreads = new Thread[nThreads];
+		
 		try {
 			@SuppressWarnings("resource")
 			Socket s = new Socket("localhost", 7000);
 			System.out.println("connected");
+            
+            InputStream is = s.getInputStream();
+			ObjectInputStream ois = new ObjectInputStream(is);
 
 			OutputStream os = s.getOutputStream();
 			ObjectOutputStream oos = new ObjectOutputStream(os);
-
-			InputStream is = s.getInputStream();
-			ObjectInputStream ois = new ObjectInputStream(is);
 
 			Integer start = (Integer) (ois.readObject());
 			Integer end = (Integer) (ois.readObject());
 
 			System.out.println(start + " - " + end);
+			
+			for (int tnum = 0; tnum < nThreads; tnum++){
+				primeObject d = new primeObject(start, end, tnum, nThreads, totalArray);
+				Thread t = new Thread(d);
+				theThreads[tnum] = t;    
+				t.start();
+			}
+        
+			int theFinalTotal = 0;
+			for (int tnum = 0; tnum < nThreads; tnum++){
+				try{
+                
+					theThreads[tnum].join();
+					theFinalTotal += totalArray[tnum];
+				}
+				catch(InterruptedException e){
+					e.printStackTrace();
+				}
+			}
 
-			int number = howManyPrime(start, end);
-
-			oos.writeObject(new Integer(number));
+			oos.writeObject(new Integer(theFinalTotal));
 
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
@@ -63,5 +84,4 @@ public class Node {
 		}
 		return count;
 	}
-
 }
