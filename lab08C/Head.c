@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//#include <unistd.h>
-//#include <sys/types.h>
+#include <unistd.h>
+#include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <errno.h>
 
 int main() {
 
@@ -17,7 +18,7 @@ int main() {
   }
 
   // port number
-  int portno = 7000;
+  int portno = 7051;
 
   // server address structure
   struct sockaddr_in serv_addr;
@@ -36,10 +37,18 @@ int main() {
   // network byte order is most sig bype first
   //   which might be host or might not be
   serv_addr.sin_port = htons(portno);
+/*
+  int yes = 1;
 
+  if(setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes)) == 1){
+    perror("setsockopt");
+    exit(1);
+  }
+*/
   // Bind the socket to the given port
-  if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
-    printf("ERROR on binding\n");
+  int b = bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr));
+  if (b < 0) {
+     printf("ERROR on binding %d, %d\n", b, errno);
     exit(1);
   }
 
